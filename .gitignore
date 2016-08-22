@@ -1,0 +1,9 @@
+Convertor
+ExecXPU
+a.out
+*.dot
+*.png
+rose_*
+*.o
+*~
+*.ti

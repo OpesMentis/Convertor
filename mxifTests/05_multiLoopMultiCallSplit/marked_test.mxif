@@ -1,0 +1,140 @@
+( parallelization marked_test_app
+    ( task_graph main_0_1
+        ( parallel
+            ( task_graph main_15_2_pf)
+            ( task_graph addsub_23_3)
+            ( task_graph muldiv_24_6)
+        )
+    )
+    ( task_graph main_15_2_pf
+        ( parallel_for
+            ( task main_15_2)
+        )
+    )
+    ( task main_15_2
+        ( mapping_of
+            ( chunk_of main_15
+                ( function main
+                   ( file "marked_test.c" )
+                   ( lines 43 72 )
+                )
+                ( lines 55 60 )
+                ( input i " int " )
+                ( input size " int " )
+                ( input e " float * " )
+                ( input f " float * " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 55 )
+    )
+    ( task_graph addsub_23_3
+        ( parallel
+            ( task_graph addsub_7_4_pf)
+            ( task_graph addsub_9_5_pf)
+        )
+    )
+    ( task_graph addsub_7_4_pf
+        ( parallel_for
+            ( task addsub_7_4)
+        )
+    )
+    ( task addsub_7_4
+        ( mapping_of
+            ( chunk_of addsub_7
+                ( function addsub
+                   ( file "marked_test.c" )
+                   ( lines 5 22 )
+                )
+                ( lines 9 13 )
+                ( input sum " float * " )
+                ( input in1 " float * " )
+                ( input in2 " float * " )
+                ( input size " int " )
+                ( input i " int " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 9 )
+    )
+    ( task_graph addsub_9_5_pf
+        ( parallel_for
+            ( task addsub_9_5)
+        )
+    )
+    ( task addsub_9_5
+        ( mapping_of
+            ( chunk_of addsub_9
+                ( function addsub
+                   ( file "marked_test.c" )
+                   ( lines 5 22 )
+                )
+                ( lines 16 20 )
+                ( input diff " float * " )
+                ( input in1 " float * " )
+                ( input in2 " float * " )
+                ( input size " int " )
+                ( input i " int " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 16 )
+    )
+    ( task_graph muldiv_24_6
+        ( parallel
+            ( task_graph muldiv_11_7_pf)
+            ( task_graph muldiv_13_8_pf)
+        )
+    )
+    ( task_graph muldiv_11_7_pf
+        ( parallel_for
+            ( task muldiv_11_7)
+        )
+    )
+    ( task muldiv_11_7
+        ( mapping_of
+            ( chunk_of muldiv_11
+                ( function muldiv
+                   ( file "marked_test.c" )
+                   ( lines 24 41 )
+                )
+                ( lines 28 32 )
+                ( input prod " float * " )
+                ( input in1 " float * " )
+                ( input in2 " float * " )
+                ( input size " int " )
+                ( input i " int " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 28 )
+    )
+    ( task_graph muldiv_13_8_pf
+        ( parallel_for
+            ( task muldiv_13_8)
+        )
+    )
+    ( task muldiv_13_8
+        ( mapping_of
+            ( chunk_of muldiv_13
+                ( function muldiv
+                   ( file "marked_test.c" )
+                   ( lines 24 41 )
+                )
+                ( lines 35 39 )
+                ( input qout " float * " )
+                ( input in1 " float * " )
+                ( input in2 " float * " )
+                ( input size " int " )
+                ( input i " int " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 35 )
+    )
+)

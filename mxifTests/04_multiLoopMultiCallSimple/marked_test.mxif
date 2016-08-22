@@ -1,0 +1,122 @@
+( parallelization marked_test_app
+    ( task_graph main_0
+        ( sequential
+            ( task_graph dummy_par_1)
+            ( task add_27)
+            ( task_graph dummy_par_2)
+            ( task add_30)
+        )
+    )
+    ( task_graph dummy_par_1
+        ( parallel
+            ( task init_24)
+            ( task init_25)
+            ( task init_26)
+        )
+    )
+    ( task init_24
+        ( mapping_of 
+            ( function init
+               ( file marked_test.c )
+               ( lines 15 20 )
+               ( input out " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 64 )
+    )
+    ( task init_25
+        ( mapping_of 
+            ( function init
+               ( file marked_test.c )
+               ( lines 15 20 )
+               ( input out " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 65 )
+    )
+    ( task init_26
+        ( mapping_of 
+            ( function init
+               ( file marked_test.c )
+               ( lines 15 20 )
+               ( input out " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 66 )
+    )
+    ( task add_27
+        ( mapping_of 
+            ( function add
+               ( file marked_test.c )
+               ( lines 25 30 )
+               ( input out " float *" )
+               ( input in1 " float *" )
+               ( input in2 " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 68 )
+    )
+    ( task_graph dummy_par_2
+        ( parallel
+            ( task mul_28)
+            ( task sub_29)
+        )
+    )
+    ( task mul_28
+        ( mapping_of 
+            ( function mul
+               ( file marked_test.c )
+               ( lines 45 50 )
+               ( input out " float *" )
+               ( input in1 " float *" )
+               ( input in2 " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 70 )
+    )
+    ( task sub_29
+        ( mapping_of 
+            ( function sub
+               ( file marked_test.c )
+               ( lines 35 40 )
+               ( input out " float *" )
+               ( input in1 " float *" )
+               ( input in2 " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 72 )
+    )
+    ( task add_30
+        ( mapping_of 
+            ( function add
+               ( file marked_test.c )
+               ( lines 25 30 )
+               ( input out " float *" )
+               ( input in1 " float *" )
+               ( input in2 " float *" )
+               ( input size " int" )
+               ( output NULL )
+            )
+        )
+        ( call_file marked_test.c )
+        ( call_line 74 )
+    )
+)

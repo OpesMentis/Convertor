@@ -1,0 +1,62 @@
+( parallelization marked_test_app
+    ( task_graph main_0_1
+        ( parallel
+            ( task_graph init_9_2)
+            ( task_graph init_10_4)
+        )
+    )
+    ( task_graph init_9_2
+        ( sequential
+            ( task_graph init_5_3_pf)
+        )
+    )
+    ( task_graph init_5_3_pf
+        ( parallel_for
+            ( task init_5_3)
+        )
+    )
+    ( task init_5_3
+        ( mapping_of
+            ( chunk_of init_5
+                ( function init
+                   ( file "marked_test.c" )
+                   ( lines 5 15 )
+                )
+                ( lines 9 13 )
+                ( input out " float * " )
+                ( input size " int " )
+                ( input i " int " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 9 )
+    )
+    ( task_graph init_10_4
+        ( sequential
+            ( task_graph init_5_5_pf)
+        )
+    )
+    ( task_graph init_5_5_pf
+        ( parallel_for
+            ( task init_5_5)
+        )
+    )
+    ( task init_5_5
+        ( mapping_of
+            ( chunk_of init_5
+                ( function init
+                   ( file "marked_test.c" )
+                   ( lines 5 15 )
+                )
+                ( lines 9 13 )
+                ( input out " float * " )
+                ( input size " int " )
+                ( input i " int " )
+                ( output NULL )
+            )
+        )
+        ( call_file "marked_test.c" )
+        ( call_line 9 )
+    )
+)
