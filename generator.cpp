@@ -153,10 +153,9 @@ void def_ftask (struct ftask *data, SgGlobal *sgg) {
 	SgNode * sgn = data->core;
 	
 	if (data->isForLoop) {
+		/* Generation of the prototype */
 		SgFunctionParameterList *params = buildFunctionParameterList();
-		
 		struct block *param = data->task->child->bro->child->child->bro->bro->bro;
-		
 		SgInitializedName * from = buildInitializedName("from", buildIntType());
 		SgInitializedName * to = buildInitializedName("to", buildIntType());
 		SgInitializedName * step = buildInitializedName("step", buildIntType());
@@ -206,8 +205,18 @@ void def_ftask (struct ftask *data, SgGlobal *sgg) {
 		prependStatement(func, sgg);
 		data->def = func;
 
-		SgNode *nd_copy = SgTreeCopy().copyAst(sgn);
-		SgForStatement *for_copy = isSgForStatement(nd_copy);
+		SgForStatement *for_copy = isSgForStatement(SgTreeCopy().copyAst(sgn));
+		
+		isSgAssignOp(isSgExprStatement(for_copy->get_for_init_stmt()->get_traversalSuccessorByIndex(0))->get_expression())->set_rhs_operand_i(buildVarRefExp("from"));
+		
+		isSgLessThanOp(isSgExprStatement(for_copy->get_test())->get_expression())->set_rhs_operand_i(buildVarRefExp("to"));
+		
+		if (isSgPlusAssignOp(for_copy->get_increment())) {
+			for_copy->set_increment(buildPlusAssignOp(isSgBinaryOp(for_copy->get_increment())->get_lhs_operand_i(), buildVarRefExp("step")));
+		} else {
+			for_copy->set_increment(buildPlusAssignOp(isSgUnaryOp(for_copy->get_increment())->get_operand_i(), buildVarRefExp("step")));
+		}
+		
 		appendStatement(for_copy, func->get_definition()->get_body());
 		file_info_setting(for_copy);
 	
