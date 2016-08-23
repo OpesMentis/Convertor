@@ -307,7 +307,7 @@ void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc,
 	
 	bool alreadyCalled[SIZE] = { false };
 	
-	/* Declaration of tasks */
+	/* Declaration of task's */
 	while (data[++i] != NULL) {
 		if (data[i]->isForLoop) {
 		
@@ -383,7 +383,7 @@ void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc,
 		}
 	}
 	
-	/* Declaration of the task_graph */
+	/* Declaration of the task_graph's */
 	struct block *tmp = rac->child;
 	for (; tmp->bro != NULL; tmp = tmp->bro);
 	
@@ -404,7 +404,16 @@ void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc,
 					}
 				}
 				
-				sprintf(buffer, "%s, %s, 1, &%s);\n",
+				char *step = (char *)malloc(10 * sizeof(char));
+				if (isSgPlusAssignOp(isSgForStatement(ft->core)->get_increment())) {
+					strcpy(step, isSgIntVal(isSgPlusAssignOp(isSgForStatement(ft->core)->get_increment())->get_rhs_operand_i())->get_valueString().c_str());
+				} else if (isSgPlusPlusOp(isSgForStatement(ft->core)->get_increment())) {
+					strcpy(step, "1");
+				} else if (isSgMinusMinusOp(isSgForStatement(ft->core)->get_increment())) {
+					strcpy(step, "-1");
+				}
+				
+				sprintf(buffer, "%s, %s, %s, &%s);\n",
 					ft->core->get_traversalSuccessorByIndex(0)
 							->get_traversalSuccessorByIndex(0)
 							->get_traversalSuccessorByIndex(0)
@@ -414,6 +423,7 @@ void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc,
 							->get_traversalSuccessorByIndex(0)
 							->get_traversalSuccessorByIndex(1)
 							->unparseToString().c_str(),
+					step,
 					ft->task->child->keyword);
 											  
 				strcat(output, buffer);
