@@ -11,6 +11,7 @@ using namespace std;
 using namespace SageInterface;
 using namespace SageBuilder;
 
+/* Basic function to add an element at the end of an array */
 void addElt(SgNode **list, SgNode *elt) {
 	int i = 0;
 	while (list[i] != NULL) {
@@ -19,7 +20,7 @@ void addElt(SgNode **list, SgNode *elt) {
 	list[i] = elt;
 }
 
-/* Collection of all FunctionDeclaration, ForStatement and FunctionCall */
+/* Collection of all SgFunctionDeclaration's, SgForStatement's and SgFunctionCall's */
 void visite (SgNode *sgn, char **codepath, SgNode **fd, SgNode **fs, SgNode **fc) {
 	if (isSgFunctionDeclaration(sgn) != NULL) {
 		addElt(fd, sgn);
@@ -54,6 +55,11 @@ void visite (SgNode *sgn, char **codepath, SgNode **fd, SgNode **fs, SgNode **fc
 	}
 }
 
+/*
+ * Function to check if an element is in an array
+ * (only usable with SgFunctionDeclaration's)
+ * They are compared thanks to their name
+**/
 bool is_in (SgNode *elt, SgNode **list) {
 	int i = -1;
 	if (isSgFunctionDeclaration(elt)) {
@@ -66,14 +72,22 @@ bool is_in (SgNode *elt, SgNode **list) {
 	return false;
 }
 
-/* Get the relevant line of a task */
+/*
+ * Get the relevant line number of a task
+ * According to the situation it can
+ * be the line of the for statement
+ * or the line of the declaration
+**/
 void get_lines(struct block * task, int * a) {
 	char x1[4];
 	strcpy(x1, task->child->bro->child->child->bro->bro->child->keyword);
 	*a = atoi(x1);
 }
 
-/* Store relevant information of a task in a struct ftask */
+/*
+ * Store relevant information of a task in a struct ftask
+ * cf 'generator.h' for more details
+**/
 void generate_ftask (struct block *rac, struct ftask **data, SgNode **fd, SgNode **fs) {
 	struct block * tmp = rac->child;
 	int i = -1;
@@ -131,7 +145,11 @@ void generate_ftask (struct block *rac, struct ftask **data, SgNode **fd, SgNode
 	}
 }
 
-/* Make a copied SgNode "neutral" */
+/*
+ * Make a copied SgNode "neutral"
+ * Indeed during the copy of a SgNode, everything is copied
+ * even the SgFileInfo, specific to a file
+**/
 void file_info_setting (SgNode *rac) {
 	if (isSgNode(rac)) {
 		isSgLocatedNode(rac)->set_file_info(Sg_File_Info::generateDefaultFileInfoForTransformationNode());
@@ -147,7 +165,7 @@ void file_info_setting (SgNode *rac) {
 	}
 }
 
-/* Generate functions declarations for tasks */
+/* Generate SgFunctionDeclaration from a ftask */
 void def_ftask (struct ftask *data, SgGlobal *sgg) {
 
 	SgNode * sgn = data->core;
@@ -288,6 +306,7 @@ void generateMain (SgGlobal * sgg1, SgGlobal * sgg2, struct ftask ** data, SgNod
 			}
 			lastStmt = stmt;
 		} else if (out == 1 && xpu_done == 0) {
+			/* Generate the XPu part at the 'right time' */
 			geneXPU(output, rac, data, fc, main1, main2);
 			attachArbitraryText(isSgLocatedNode(lastStmt), string(output), PreprocessingInfo::after);
 			xpu_done = 1;
@@ -461,7 +480,7 @@ void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc,
 	strcat(output, "xpu::clean();\n");
 }
 
-/* Generate a dot file to show the parallel/sequential structure */
+/* Generate a dot file to illustrate the parallel/sequential structure */
 void geneDOT (struct block * rac) {
 	FILE * f_dot = fopen("mxif.dot", "w");
 	if (f_dot == NULL) {
@@ -492,6 +511,23 @@ void geneDOT (struct block * rac) {
 	fclose(f_dot);
 }
 
+/* 
+ * Generate 'base_code.cpp' which will be the
+ * canvas for the generation
+ * of the output file
+**/
+void gene_base_code () {
+	FILE * f_base = fopen("base_code.cpp", "w");
+	fprintf(f_base, "#define XPU_DISABLE_AUTOMATIC_SHARED_MEMORY_DETECTION\n");
+	fprintf(f_base, "#include <xpu.h>\n#include <xpu/timer.h>\n\nusing namespace xpu;\n\n");
+	fprintf(f_base, "int main(int argc, char **argv) {\n");
+	fprintf(f_base, "\tint threads;\n\txpu::timer t;\n\n");
+	fprintf(f_base, "\tif (argc > 1) {\n\t\tthreads = atoi(argv[1]);\n\t} else {\n\t\tthreads = 4;\n\t}\n\n");
+	fprintf(f_base, "\txpu::init(threads);\n}\n");
+	fclose(f_base);
+}
+
+/* Function that call all the others to properly generate the output code */
 int generateCode (int argc, char ** argv, SgProject * project, FILE * f_mxif) {
 	/* PARSE MXIF */
 	struct block * rac = (struct block *)malloc(sizeof(struct block));
@@ -527,6 +563,7 @@ int generateCode (int argc, char ** argv, SgProject * project, FILE * f_mxif) {
 	printf("Extraction of the tasks succeeded.\n");
 	
 	/* OPENNING OF THE BASE CODE FOR THE OUTPUT FILE */
+	gene_base_code();
 	char *arg_out = (char *)malloc(500 * sizeof(char));
 	strcpy(arg_out, "./Convertor -I. -I/home/demo/xpu-0.1.5/ -L. -L/home/demo/xpu-0.1.5/.libs -lxpu-0.1.5 -lm -lpthread -lrt base_code.cpp");
 	
@@ -538,6 +575,10 @@ int generateCode (int argc, char ** argv, SgProject * project, FILE * f_mxif) {
 	}
 	
 	SgProject *project2 = frontend(10, argv2);
+	if (project2 == NULL) {
+		printf("Openning of the ouput file failed.\n");
+		exit(0);
+	}
 	printf("Openning of the output file succeeded.\n");
 	
 	/* DECLARATION OF FTASKS */
@@ -552,8 +593,6 @@ int generateCode (int argc, char ** argv, SgProject * project, FILE * f_mxif) {
 			}
 		}
 	}
-
-	generateDOT(*project2);
 
 	generateMain(sgg, sgg2, data, functCall, rac);
 	printf("Main function successfully generated.\n");
