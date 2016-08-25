@@ -12,8 +12,16 @@ This software requires at least the *Rose compiler* library to execute. MXIF fil
 
 **How to use Convertor**
 
-You can compile the software thanks to the classic `make` command. With `make run1` you can test the software on example files, `make ExecXPU` will compile the generated file and `make run2` will execute it.
+You can compile the software thanks to the classic `make` command.
 
-To use Convertor on you own files, follow the syntax `./Convertor inputfile.c inputfile.mxif`.
+With `make test` or directly with the bash script `test.sh` you can test Convertor on the test cases in the `testMxif` folder. According to the arguments given to `test.sh` more or less will be done.
 
-The Makefile is easily readable and customizable.
+- `test.sh g` will generate the C++/XPU files.
+- `test.sh c` will compile the C++/XPU files.
+- `test.sh x` will execute the generated C++/XPU files and the original C files.
+
+All the arguments can be combined, seperated by spaces. By default, everything is done. Information about the generation is written in a `convertor.log` file.
+
+To use Convertor on you own files, follow the syntax `./Convertor inputfile.c inputfile.mxif outputfile.cpp`.
+
+`Makefile` and the script `test.sh` are easily readable and customizable.
