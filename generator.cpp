@@ -528,9 +528,9 @@ void gene_base_code () {
 }
 
 /* Function that call all the others to properly generate the output code */
-int generateCode (int argc, char ** argv, SgProject * project, FILE * f_mxif) {
+int generateCode (int argc, char **argv, SgProject *project, FILE * f_mxif) {
 	/* PARSE MXIF */
-	struct block * rac = (struct block *)malloc(sizeof(struct block));
+	struct block *rac = (struct block *)malloc(sizeof(struct block));
 	parseMXIF(f_mxif, rac);
 	printf("Parse of the MXIF file succeeded.\n");
 	
@@ -604,5 +604,23 @@ int generateCode (int argc, char ** argv, SgProject * project, FILE * f_mxif) {
 	
 	geneDOT(rac);
 
-	return backend(project2);
+	backend(project2);
+	
+	char *command;
+	
+	if (argc > 3) {
+		command = (char *)malloc(sizeof(char) * (strlen(argv[3])+30));
+		command[0] = '\0';
+		strcat(command, "mv rose_base_code.cpp ");
+		strcat(command, argv[3]);
+	} else {
+		command = (char *)malloc(sizeof(char) * 50);
+		command[0] = '\0';
+		strcat(command, "mv -n rose_base_code.cpp ");
+		strcat(command, "output_file.cpp");
+	}
+	
+	system(command);
+	
+	return 0;
 }
