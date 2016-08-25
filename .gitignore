@@ -3,6 +3,7 @@ Convertor
 ./*/ExecXPU
 ./*/ExecSEQ
 ./*/output*
+base_code.cpp
 a.out
 *.dot
 *.png
