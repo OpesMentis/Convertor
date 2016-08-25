@@ -1,5 +1,8 @@
 Convertor
-ExecXPU
+*.log
+./*/ExecXPU
+./*/ExecSEQ
+./*/output*
 a.out
 *.dot
 *.png
