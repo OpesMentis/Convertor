@@ -22,5 +22,6 @@ void file_info_setting (SgNode *rac);
 void def_ftask (struct ftask *data, SgGlobal *sgg);
 void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc, SgBasicBlock *m1, SgBasicBlock *m2);
 void generateMain (SgGlobal *sgg1, SgGlobal *sgg2, struct ftask **data, SgNode **fc, struct block *rac);
+void gene_base_code ();
 
 #endif
