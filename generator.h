@@ -14,7 +14,7 @@ struct ftask {
 
 void addElt (SgNode **list, SgNode *elt);
 void visite (SgNode *sgn, char **codepath, SgNode **fd, SgNode **fs, SgNode **fc);
-int generateCode (int argc, char **argv, SgProject *project, FILE *f_mxif);
+int generateCode (SgProject *project, FILE * f_mxif, char **argv, char *cpp_output, char *dot_output);
 void generate_ftask (struct block *rac, struct ftask **data, SgNode **fd, SgNode **fs);
 void get_lines (struct block *task, int *a);
 bool is_in (SgNode *elt, SgNode **list);
@@ -23,5 +23,6 @@ void def_ftask (struct ftask *data, SgGlobal *sgg);
 void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc, SgBasicBlock *m1, SgBasicBlock *m2);
 void generateMain (SgGlobal *sgg1, SgGlobal *sgg2, struct ftask **data, SgNode **fc, struct block *rac);
 void gene_base_code ();
+void geneDOT (struct block * rac, char *dot_output);
 
 #endif

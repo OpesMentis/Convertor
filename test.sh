@@ -41,7 +41,7 @@ if [ "$g" = "1" ]; then
 		echo "input files: ${FOLDi}/marked_test.c ${FOLDi}/marked_test.mxif" >> convertor.log
 		echo "output file: ${FOLDi}/output.cpp" >> convertor.log
 		echo "Logs of the generation currently written in convertor.log..."
-		./Convertor ${FOLDi}/marked_test.c ${FOLDi}/marked_test.mxif ${FOLDi}/output.cpp >> convertor.log
+		./Convertor -i ${FOLDi}/marked_test.c -m ${FOLDi}/marked_test.mxif -o ${FOLDi}/output.cpp -d ${FOLDi}/output.dot >> convertor.log
 		echo "Testcase number ${i} -- Code generation over"
 	done
 fi

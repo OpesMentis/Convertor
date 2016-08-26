@@ -481,8 +481,8 @@ void geneXPU (char *output, struct block *rac, struct ftask **data, SgNode **fc,
 }
 
 /* Generate a dot file to illustrate the parallel/sequential structure */
-void geneDOT (struct block * rac) {
-	FILE * f_dot = fopen("mxif.dot", "w");
+void geneDOT (struct block * rac, char *dot_output) {
+	FILE * f_dot = fopen(dot_output, "w");
 	if (f_dot == NULL) {
 		printf("Failure of the generation of the DOT file.\n");
 		return;
@@ -528,14 +528,14 @@ void gene_base_code () {
 }
 
 /* Function that call all the others to properly generate the output code */
-int generateCode (int argc, char **argv, SgProject *project, FILE * f_mxif) {
+int generateCode (SgProject *project, FILE * f_mxif, char **argv, char *cpp_output, char *dot_output) {
 	/* PARSE MXIF */
 	struct block *rac = (struct block *)malloc(sizeof(struct block));
 	parseMXIF(f_mxif, rac);
 	printf("Parse of the MXIF file succeeded.\n");
 	
 	/* VISITE */
-	char * codepath = (char *)malloc(PATH_MAX);
+	char *codepath = (char *)malloc(PATH_MAX);
 	realpath(argv[1], codepath);
 	
 	SgGlobal *sgg = getFirstGlobalScope(project);
@@ -580,11 +580,11 @@ int generateCode (int argc, char **argv, SgProject *project, FILE * f_mxif) {
 		exit(0);
 	}
 	printf("Openning of the output file succeeded.\n");
-	
+
 	/* DECLARATION OF FTASKS */
 	SgGlobal *sgg2 = getFirstGlobalScope(project2);
 	i = -1;
-
+	
 	while (data[++i] != NULL) {
 		if (data[i]->isForLoop || !alreadyDef[data[i]->rk]) {
 			def_ftask(data[i], sgg2);
@@ -601,24 +601,16 @@ int generateCode (int argc, char **argv, SgProject *project, FILE * f_mxif) {
 	cutPreprocessingInfo(findFirstDefiningFunctionDecl(sgg), PreprocessingInfo::before, save_buf);
 	cutPreprocessingInfo(findMain(sgg2), PreprocessingInfo::before, save_buf);
 	pastePreprocessingInfo(findFirstDefiningFunctionDecl(sgg2), PreprocessingInfo::before, save_buf);
-	
-	geneDOT(rac);
+
+	geneDOT(rac, dot_output);
 
 	backend(project2);
 	
 	char *command;
 	
-	if (argc > 3) {
-		command = (char *)malloc(sizeof(char) * (strlen(argv[3])+30));
-		command[0] = '\0';
-		strcat(command, "mv rose_base_code.cpp ");
-		strcat(command, argv[3]);
-	} else {
-		command = (char *)malloc(sizeof(char) * 50);
-		command[0] = '\0';
-		strcat(command, "mv -n rose_base_code.cpp ");
-		strcat(command, "output_file.cpp");
-	}
+	command = (char *)malloc(sizeof(char) * (strlen(cpp_output)+30));
+	command[0] = '\0';
+	sprintf(command, "mv rose_base_code.cpp %s", cpp_output);
 	
 	system(command);
 	
