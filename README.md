@@ -22,6 +22,6 @@ With `make test` or by calling directly the bash script `test.sh` you can test C
 
 All the arguments can be combined, seperated by spaces. If no argument is given, everything is done by default. Information about the generation is written in a `convertor.log` file.
 
-To use Convertor on you own files, follow the syntax `./Convertor -i inputfile.c -m inputfile.mxif -o outputfile.cpp -d outputfile.dot`. Only the `-i` and `-d` arguments are mandatory, default names will be given to the output files if nothing is specified. The order of parameters does not matter.
+To use Convertor on your own files, follow the syntax `./Convertor -i inputfile.c -m inputfile.mxif -o outputfile.cpp -d outputfile.dot`. Only the `-i` and `-d` arguments are mandatory, default names will be given to the output files if nothing is specified. The order of parameters does not matter.
 
 `Makefile` and the script `test.sh` are easily readable and customizable.
