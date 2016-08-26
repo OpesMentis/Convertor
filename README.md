@@ -1,6 +1,6 @@
 # Convertor
 
-Code written in the framework of a three-month internship in TU Delft about the parallelisation of C programs. This Linux software convert a C code and an MXIF file into a parallelised C++ code using the *XPU* library.
+Code written in the framework of a three-month internship in TU Delft about the parallelisation of C programs. This Linux software converts a C code and an MXIF file into a parallelised C++ code using the *XPU* library. A dot file is also generated with a graph showing the parallel/sequential structure.
 
 **Requirements**
 
@@ -14,14 +14,14 @@ This software requires at least the *Rose compiler* library to execute. MXIF fil
 
 You can compile the software thanks to the classic `make` command.
 
-With `make test` or directly with the bash script `test.sh` you can test Convertor on the test cases in the `testMxif` folder. According to the arguments given to `test.sh` more or less will be done.
+With `make test` or by calling directly the bash script `test.sh` you can test Convertor on the test cases in the `testMxif` folder. According to the arguments given to `test.sh` more or less will be done.
 
 - `test.sh g` will generate the C++/XPU files.
 - `test.sh c` will compile the C++/XPU files.
 - `test.sh x` will execute the generated C++/XPU files and the original C files.
 
-All the arguments can be combined, seperated by spaces. By default, everything is done. Information about the generation is written in a `convertor.log` file.
+All the arguments can be combined, seperated by spaces. If no argument is given, everything is done by default. Information about the generation is written in a `convertor.log` file.
 
-To use Convertor on you own files, follow the syntax `./Convertor inputfile.c inputfile.mxif outputfile.cpp`.
+To use Convertor on you own files, follow the syntax `./Convertor -i inputfile.c -m inputfile.mxif -o outputfile.cpp -d outputfile.dot`. Only the `-i` and `-d` arguments are mandatory, default names will be given to the output files if nothing is specified. The order of parameters does not matter.
 
 `Makefile` and the script `test.sh` are easily readable and customizable.
