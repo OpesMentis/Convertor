@@ -249,6 +249,7 @@ void def_ftask (struct ftask *data, SgGlobal *sgg) {
 		SgFunctionDeclaration *func = buildDefiningFunctionDeclaration(func_name, buildIntType(), params, sgg);
 		
 		func->get_definition()->set_body(isSgBasicBlock(SgTreeCopy().copyAst(isSgFunctionDeclaration(sgn)->get_definition()->get_body())));
+		appendStatement(buildReturnStmt(buildIntVal(0)), func->get_definition()->get_body());
 		
 		file_info_setting(func);
 		prependStatement(func, sgg);
