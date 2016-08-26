@@ -43,6 +43,7 @@ if [ "$g" = "1" ]; then
 		echo "Logs of the generation currently written in convertor.log..."
 		./Convertor -i ${FOLDi}/marked_test.c -m ${FOLDi}/marked_test.mxif -o ${FOLDi}/output.cpp -d ${FOLDi}/output.dot >> convertor.log
 		echo "Testcase number ${i} -- Code generation over"
+		dot -Tpng ${FOLDi}/output.dot -o ${FOLDi}/mxif_structure.png
 	done
 fi
 
@@ -61,7 +62,7 @@ fi
 if [ "$x" = "1" ]; then
 	for (( i=0; i<6; i++ ));
 	do
-		echo "Testcase number ${i} -- Code execution & comparison"
+		echo "Testcase number ${i} -- Code execution"
 		FOLDi=./mxifTests/${FOLD[$i]}
 	
 		${FOLDi}/ExecXPU
