@@ -4,7 +4,7 @@ Code written in the framework of a three-month internship in TU Delft about the 
 
 **Requirements**
 
-This software requires at least the *Rose compiler* library to execute. MXIF files are generated thanks to the *MCPROF* application.To compile and execute the generated code, the *XPU* library is necessary. These tools are available here:
+This software requires at least the *Rose compiler* library and the *XPU* library to execute. MXIF files are generated thanks to the *MCPROF* application. The *XPU* library is also necessary to compile and execute the generated code. These tools are available here:
 
 - [*Rose compiler*](http://rosecompiler.org/) (the use of a virtual machine is the easiest and recommanded way)
 - [*MCPROF*](https://bitbucket.org/imranashraf/mcprof)
